@@ -33,6 +33,7 @@ namespace MiHomeLib
             {"sensor_wleak.aq1", sid => new WaterLeakSensor(sid)},
             {"smoke",            sid => new SmokeSensor(sid)},
             {"switch",           sid => new Switch(sid)},
+            {"sensor_switch.aq2", sid => new Switch2(sid)},
             {"ctrl_neutral2",    sid => new WiredDualWallSwitch(sid)},
             {"remote.b286acn01", sid => new WirelessDualWallSwitch(sid)},
         };
