@@ -17,22 +17,25 @@ namespace MiHomeLib.Devices
         public event Action<EventArgs> OnRightLongClick;
         public event Action<EventArgs> OnLeftLongClick;
 
+        public string StatusLeft { get; private set; }
+        public string StatusRight { get; private set; }
+
         public override void ParseData(string command)
         {
             var jObject = JObject.Parse(command);
 
             if (jObject[LeftChannel] != null)
             {
-
-                if (jObject[LeftChannel].Value<string>() == "click")
+                StatusLeft = jObject[LeftChannel].Value<string>();
+                if (StatusLeft == "click")
                 {
                     OnLeftClick?.Invoke(new EventArgs());
                 }
-                else if (jObject[LeftChannel].Value<string>() == "double_click")
+                else if (StatusLeft == "double_click")
                 {
                     OnLeftDoubleClick?.Invoke(new EventArgs());
                 }
-                else if (jObject[LeftChannel].Value<string>() == "long_click")
+                else if (StatusLeft == "long_click")
                 {
                     OnLeftLongClick?.Invoke(new EventArgs());
                 }
@@ -41,15 +44,16 @@ namespace MiHomeLib.Devices
 
             if (jObject[RightChannel] != null)
             {
-                if (jObject[RightChannel].Value<string>() == "click")
+                StatusRight = jObject[RightChannel].Value<string>();
+                if (StatusRight == "click")
                 {
                     OnRightClick?.Invoke(new EventArgs());
                 }
-                else if (jObject[RightChannel].Value<string>() == "double_click")
+                else if (StatusRight == "double_click")
                 {
                     OnRightDoubleClick?.Invoke(new EventArgs());
                 }
-                else if (jObject[RightChannel].Value<string>() == "long_click")
+                else if (StatusRight == "long_click")
                 {
                     OnRightLongClick?.Invoke(new EventArgs());
                 }
@@ -60,6 +64,11 @@ namespace MiHomeLib.Devices
         public WirelessDualWallSwitch(string sid) : base(sid, "remote.b286acn01")
         {
 
+        }
+
+        public override string ToString()
+        {
+            return $"Status Left: {StatusLeft}, Right: {StatusRight}";
         }
     }
 }
