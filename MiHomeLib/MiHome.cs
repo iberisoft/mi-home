@@ -15,7 +15,7 @@ namespace MiHomeLib
     {
         private Gateway _gateway;
         private readonly string _gatewaySid;
-        private static UdpTransport _transport;
+        private readonly UdpTransport _transport;
         private readonly CancellationTokenSource _cts = new CancellationTokenSource();
 
         private readonly ConcurrentDictionary<string, MiHomeDevice> _devicesList = new ConcurrentDictionary<string, MiHomeDevice>();
@@ -23,21 +23,7 @@ namespace MiHomeLib
 
         private const int ReadDeviceInterval = 100;
         
-        private readonly Dictionary<string, Func<string, MiHomeDevice>> _devicesMap = new Dictionary<string, Func<string, MiHomeDevice>>
-        {
-            {"sensor_ht",        sid => new ThSensor(sid)},
-            {"weather.v1",       sid => new WeatherSensor(sid)},
-            {"motion",           sid => new MotionSensor(sid)},
-            {"plug",             sid => new SocketPlug(sid, _transport)},
-            {"magnet",           sid => new DoorWindowSensor(sid)},
-            {"sensor_wleak.aq1", sid => new WaterLeakSensor(sid)},
-            {"smoke",            sid => new SmokeSensor(sid)},
-            {"switch",           sid => new Switch(sid)},
-            {"sensor_switch.aq2", sid => new Switch2(sid)},
-            {"ctrl_neutral2",    sid => new WiredDualWallSwitch(sid)},
-            {"remote.b286acn01", sid => new WirelessDualWallSwitch(sid)},
-        };
-
+        private readonly Dictionary<string, Func<string, MiHomeDevice>> _devicesMap;
         private readonly Dictionary<string, Action<ResponseCommand>> _commandsToActions;
         private readonly Task _receiveTask;
 
@@ -64,6 +50,21 @@ namespace MiHomeLib
             _gatewaySid = gatewaySid;
 
             _transport = new UdpTransport(gatewayPassword);
+
+            _devicesMap = new Dictionary<string, Func<string, MiHomeDevice>>
+            {
+                {"sensor_ht",        sid => new ThSensor(sid)},
+                {"weather.v1",       sid => new WeatherSensor(sid)},
+                {"motion",           sid => new MotionSensor(sid)},
+                {"plug",             sid => new SocketPlug(sid, _transport)},
+                {"magnet",           sid => new DoorWindowSensor(sid)},
+                {"sensor_wleak.aq1", sid => new WaterLeakSensor(sid)},
+                {"smoke",            sid => new SmokeSensor(sid)},
+                {"switch",           sid => new Switch(sid)},
+                {"sensor_switch.aq2", sid => new Switch2(sid)},
+                {"ctrl_neutral2",    sid => new WiredDualWallSwitch(sid)},
+                {"remote.b286acn01", sid => new WirelessDualWallSwitch(sid)},
+            };
 
             _receiveTask = Task.Run(() => StartReceivingMessages(_cts.Token), _cts.Token);
 
