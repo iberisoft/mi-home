@@ -34,6 +34,7 @@ namespace MiHomeLib.Devices
 
             if (jObject["no_motion"] != null)
             {
+                Status = "no_motion";
                 NoMotion = int.Parse(jObject["no_motion"].ToString());
                 
                 OnNoMotion?.Invoke(this, new NoMotionEventArgs(NoMotion));
