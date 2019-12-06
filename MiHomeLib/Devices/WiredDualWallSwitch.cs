@@ -6,8 +6,8 @@ namespace MiHomeLib.Devices
 {
     public class WiredDualWallSwitch : MiHomeDevice
     {
-        public event EventHandler OnSwitchChannelRight;
-        public event EventHandler OnSwitchChannelLeft;
+        public event EventHandler<WallSwitchEventArgs> OnSwitchChannelRight;
+        public event EventHandler<WallSwitchEventArgs> OnSwitchChannelLeft;
 
         public WiredDualWallSwitch(string sid) : base(sid, "ctrl_neutral2") 
         {
