@@ -1,4 +1,5 @@
 ﻿using System;
+using MiHomeLib.Events;
 using Newtonsoft.Json.Linq;
 
 namespace MiHomeLib.Devices
@@ -8,14 +9,14 @@ namespace MiHomeLib.Devices
         private const string LeftChannel = "channel_0";
         private const string RightChannel = "channel_1";
 
-        public event Action<EventArgs> OnRightClick;
-        public event Action<EventArgs> OnLeftClick;
+        public event EventHandler<WallSwitchEventArgs> OnRightClick;
+        public event EventHandler<WallSwitchEventArgs> OnLeftClick;
 
-        public event Action<EventArgs> OnRightDoubleClick;
-        public event Action<EventArgs> OnLeftDoubleClick;
+        public event EventHandler<WallSwitchEventArgs> OnRightDoubleClick;
+        public event EventHandler<WallSwitchEventArgs> OnLeftDoubleClick;
 
-        public event Action<EventArgs> OnRightLongClick;
-        public event Action<EventArgs> OnLeftLongClick;
+        public event EventHandler<WallSwitchEventArgs> OnRightLongClick;
+        public event EventHandler<WallSwitchEventArgs> OnLeftLongClick;
 
         public string StatusLeft { get; private set; }
         public string StatusRight { get; private set; }
@@ -29,15 +30,15 @@ namespace MiHomeLib.Devices
                 StatusLeft = jObject[LeftChannel].Value<string>();
                 if (StatusLeft == "click")
                 {
-                    OnLeftClick?.Invoke(new EventArgs());
+                    OnLeftClick?.Invoke(this, new WallSwitchEventArgs(StatusLeft));
                 }
                 else if (StatusLeft == "double_click")
                 {
-                    OnLeftDoubleClick?.Invoke(new EventArgs());
+                    OnLeftDoubleClick?.Invoke(this, new WallSwitchEventArgs(StatusLeft));
                 }
                 else if (StatusLeft == "long_click")
                 {
-                    OnLeftLongClick?.Invoke(new EventArgs());
+                    OnLeftLongClick?.Invoke(this, new WallSwitchEventArgs(StatusLeft));
                 }
 
             }
@@ -47,15 +48,15 @@ namespace MiHomeLib.Devices
                 StatusRight = jObject[RightChannel].Value<string>();
                 if (StatusRight == "click")
                 {
-                    OnRightClick?.Invoke(new EventArgs());
+                    OnRightClick?.Invoke(this, new WallSwitchEventArgs(StatusRight));
                 }
                 else if (StatusRight == "double_click")
                 {
-                    OnRightDoubleClick?.Invoke(new EventArgs());
+                    OnRightDoubleClick?.Invoke(this, new WallSwitchEventArgs(StatusRight));
                 }
                 else if (StatusRight == "long_click")
                 {
-                    OnRightLongClick?.Invoke(new EventArgs());
+                    OnRightLongClick?.Invoke(this, new WallSwitchEventArgs(StatusRight));
                 }
             }
 
